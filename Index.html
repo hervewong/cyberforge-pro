@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CYBERFORGE PRO — Démo</title>
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" id="ic" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%230b1220'/><path d='M256 70 L400 120 V260 C400 340 330 400 256 440 C182 400 112 340 112 260 V120 Z' fill='%2336d6c4'/><path d='M256 96 L378 138 V258 C378 326 318 378 256 412 C194 378 134 326 134 258 V138 Z' fill='%2316364a'/><text x='256' y='290' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='120' fill='%2336d6c4' text-anchor='middle'>CF</text></svg>" type="image/svg+xml">
+
+<style>
+:root{--bg:#0b1220;--card:#131c2e;--fg:#e8eef7;--mut:#8a97ab;--ac:#36d6c4;--wa:#ffa726;--er:#4a2028;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1050px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0 14px}
+.logo{font-weight:700;display:flex;gap:8px;align-items:center}.logo span{color:var(--ac);font-size:20px}
+.st{font-size:12px;color:var(--mut)}
+.demo{background:#2a2410;border:1px solid #6b5a1c;color:#ffd866;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+.hero{border-radius:18px;padding:22px;background:linear-gradient(135deg,#16364a,#17243a)}
+.hero small{color:var(--ac);letter-spacing:1.2px;font-size:12px}
+.hero h1{margin:8px 0 4px;font-size:26px}.hero p{margin:0;color:#ffffffb3}
+.metrics{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
+.m{flex:1 1 150px;background:var(--card);border-radius:14px;padding:14px}
+.m b{font-size:21px;display:block}.m i{color:var(--mut);font-size:12px;font-style:normal}
+h2{font-size:14px;letter-spacing:1px;margin:20px 0 2px}.sub{color:var(--mut);font-size:12px;margin-bottom:8px}
+.card{background:var(--card);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+label{font-size:12px;color:var(--mut)}
+input{width:100%;padding:12px;border-radius:8px;border:1px solid #33425c;background:#0e1626;color:var(--fg);font-size:15px}
+button{padding:12px;border-radius:999px;border:0;font-size:15px;font-weight:600;cursor:pointer}
+.pri{background:var(--ac);color:#06201c}.out{background:transparent;border:1px solid var(--ac);color:var(--ac)}
+button:disabled{opacity:.5}
+.row{display:flex;gap:10px;align-items:center;padding:7px 0;border-top:1px solid #1e2a40;font-size:14px}
+.row .t{flex:1}.row small{display:block;color:var(--mut);font-size:12px}
+.ok{color:var(--ac)}.wn{color:var(--wa)}
+.res b.h{display:block;margin:6px 0}
+.note{color:#ffffff80;font-size:11px;margin-top:6px}
+.err{background:var(--er);border-radius:12px;padding:12px;margin-top:12px;font-size:14px}
+footer{color:#ffffff80;font-size:12px;text-align:center;margin:22px 0}
+.hint{font-size:12px;color:var(--mut)}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #33425c;background:#0e1626;color:var(--fg);font-size:14px;font-family:inherit}input[type=range]{padding:0}.bar{height:8px;border-radius:4px;background:#0e1626;overflow:hidden}.bar div{height:100%;width:0;transition:width .2s}.mono{font-family:monospace;font-size:12px;word-break:break-all;color:var(--mut)}</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo"><span>🛡️</span>CYBERFORGE PRO</div><div class="st" id="api">API non vérifiée</div></header>
+<div class="demo">Démo visuelle : les résultats ci‑dessous sont <b>simulés</b> dans ton navigateur. Rien n’est réellement scanné. Dans la vraie appli, c’est ton API Python qui fait les contrôles.</div>
+
+<div class="hero"><small>SECURITY OPERATIONS WORKSPACE</small><h1>Sécurisez votre périmètre.</h1><p>Audits défensifs, visibilité réseau et analyse de configuration.</p></div>
+
+<div class="metrics">
+<div class="m"><b>02</b><i>Modules disponibles</i></div>
+<div class="m"><b id="cnt">0</b><i>Audits réalisés</i></div>
+<div class="m"><b>Local</b><i>Mode</i></div>
+</div>
+
+<h2>AUDIT WEB</h2><div class="sub">Contrôle non intrusif des en-têtes HTTP</div>
+<div class="card">
+<label for="url">URL autorisée</label>
+<input id="url" value="http://localhost:8000/health">
+<button class="pri" id="bw">🔍 Lancer l’audit Web</button>
+<div class="res" id="rw"></div>
+</div>
+
+<h2>ANALYSE RÉSEAU</h2><div class="sub">Test TCP sur une liste fixe de ports courants</div>
+<div class="card">
+<label for="host">Hôte autorisé</label>
+<input id="host" value="localhost">
+<div class="hint">Ports : 22, 80, 443, 8080, 8443</div>
+<button class="out" id="bp">🛰️ Analyser les ports</button>
+<div class="res" id="rp"></div>
+</div>
+
+<h2>BOÎTE À OUTILS</h2><div class="sub">Outils défensifs. Ceux marqués ✅ fonctionnent pour de vrai dans ton navigateur.</div>
+<div class="tools">
+<div class="card"><b>🔑 Générateur de mot de passe ✅</b><label for="len">Longueur : <span id="lv">20</span></label><input type="range" id="len" min="8" max="64" value="20"><button class="pri" id="bg">Générer</button><input id="pw" readonly placeholder="Mot de passe généré"><button class="out" id="cp">Copier</button></div>
+<div class="card"><b>💪 Testeur de robustesse ✅</b><input id="ps" type="text" placeholder="Tape un mot de passe à tester"><div id="pr" class="hint">Rien n’est envoyé nulle part.</div><div class="bar"><div id="pb"></div></div></div>
+<div class="card"><b>#️⃣ Calculateur de hash ✅</b><input id="hi" placeholder="Texte à hacher"><button class="out" id="hb">Calculer SHA-256 et SHA-1</button><div id="ho" class="mono"></div></div>
+<div class="card"><b>📋 Analyseur d’en-têtes collés ✅</b><textarea id="ht" rows="4" placeholder="Colle ici les en-têtes HTTP d’une réponse, un par ligne"></textarea><button class="out" id="hx">Analyser</button><div id="hr"></div></div>
+<div class="card"><b>📜 Certificat HTTPS (simulé)</b><input id="cu" value="localhost"><button class="out" id="cb">Vérifier le certificat</button><div id="cr"></div></div>
+<div class="card"><b>✉️ E-mail SPF / DMARC (simulé)</b><input id="eu" value="localhost"><button class="out" id="eb">Vérifier le domaine</button><div id="er"></div></div>
+<div class="card"><b>🔌 Analyseur netstat ✅</b><div class="hint">Sur ton PC Windows : touche Windows, tape cmd, puis netstat -ano. Copie le résultat ici.</div><textarea id="nt" rows="4" placeholder="Colle ici le résultat de netstat"></textarea><button class="out" id="nb">Analyser les connexions</button><div id="nr"></div></div>
+<div class="card"><b>🧮 Calculateur IP / CIDR ✅</b><input id="ci" value="192.168.1.10/24"><button class="out" id="cib">Calculer</button><div id="cir" class="mono"></div></div>
+<div class="card"><b>🧬 Analyseur de code source ✅</b><div class="hint">Clic droit sur une page puis Afficher le code source, copie tout et colle ici. Rien n’est exécuté.</div><textarea id="src" rows="4" placeholder="Colle ici le code HTML d’une page"></textarea><button class="out" id="sb">Analyser</button><div id="sr"></div></div>
+<div class="card"><b>🌐 Fiche d’un site : IP, serveur, techno (simulé)</b><input id="fu" value="localhost"><button class="out" id="fb">Afficher la fiche</button><div id="fr"></div></div>
+<div class="card"><b>🪙 Décodeur JWT ✅</b><div class="hint">Lit le contenu d’un jeton. Ne vérifie pas la signature.</div><textarea id="jw" rows="3" placeholder="eyJhbGciOi..."></textarea><button class="out" id="jwb">Décoder</button><div id="jwr"></div></div>
+<div class="card"><b>🔤 Base64 / URL / Hexa ✅</b><select id="cvm" style="padding:10px;border-radius:8px;background:#0e1626;color:#e8eef7;border:1px solid #33425c"><option value="base64">Base64</option><option value="url">URL</option><option value="hex">Hexadécimal</option></select><textarea id="cv" rows="3" placeholder="Texte"></textarea><div style="display:flex;gap:8px"><button class="out" style="flex:1" id="cve">Encoder</button><button class="out" style="flex:1" id="cvd">Décoder</button></div><div id="cvo" class="mono"></div></div>
+<div class="card"><b>🔎 Extracteur IP / e-mails / URL ✅</b><textarea id="ex" rows="3" placeholder="Colle un texte ou un journal"></textarea><button class="out" id="exb">Extraire</button><div id="exr"></div></div>
+<div class="card"><b>🧱 Générateur de politique CSP ✅</b><label><input type="checkbox" id="c1" style="width:auto"> Google Fonts</label><label><input type="checkbox" id="c2" style="width:auto"> Scripts cdnjs</label><label><input type="checkbox" id="c3" style="width:auto"> Images data:</label><label><input type="checkbox" id="c4" style="width:auto"> Styles inline</label><button class="out" id="csb">Générer</button><div id="cso" class="mono"></div></div>
+<div class="card"><b>📜 Analyseur de journaux ✅</b><div class="hint">Repère les IP avec des échecs de connexion répétés (5 ou plus).</div><textarea id="lg" rows="3" placeholder="Colle des lignes de journal (auth.log, serveur web...)"></textarea><button class="out" id="lgb">Analyser</button><div id="lgr"></div></div>
+<div class="card"><b>⏱️ Convertisseur de dates ✅</b><input id="ts" placeholder="Timestamp ou date (vide = maintenant)"><button class="out" id="tsb">Convertir</button><div id="tsr"></div></div>
+</div>
+
+<h2>HISTORIQUE ET RAPPORT</h2><div class="sub">Tous les audits de cette session</div>
+<div class="card"><div id="hl" class="hint">Aucun audit pour l’instant.</div><button class="out" id="rb">📄 Copier le rapport</button><button class="out" id="rc">🗑️ Effacer l’historique</button></div>
+
+<div id="err"></div>
+<p><button class="out" style="width:100%;margin-top:16px" id="bh">💓 Tester la connexion API</button></p>
+<footer>Utilisez uniquement des systèmes vous appartenant ou couverts par une autorisation explicite. Les résultats sont indicatifs et ne remplacent pas un audit complet.</footer>
+</div>
+<script>
+var ALLOWED=["localhost","127.0.0.1"],done={w:0,p:0};
+function $(i){return document.getElementById(i)}
+function cnt(){$("cnt").textContent=done.w+done.p}
+function err(m){$("err").innerHTML=m?'<div class="err">'+m+'</div>':''}
+function scope(h){h=h.trim().toLowerCase().replace(/\.$/,'');if(ALLOWED.indexOf(h)<0){err("Hôte hors périmètre. Ajoutez explicitement ’"+h.replace(/[<>&]/g,'')+"’ à CYBERFORGE_ALLOWED_HOSTS après autorisation. (Refus simulé du garde‑fou serveur)");return false}err("");return true}
+$("bh").onclick=function(){$("api").textContent="API connectée (simulée)"};
+$("bw").onclick=function(){
+ var h;try{h=new URL($("url").value.trim()).hostname}catch(e){err("URL invalide.");return}
+ if(!scope(h))return;
+ var f=[["Strict-Transport-Security","pass",""],["Content-Security-Policy","warning","Définir une politique CSP adaptée."],["X-Content-Type-Options","pass",""],["Protection anti-framing","warning","Ajouter X-Frame-Options ou frame-ancestors dans CSP."],["Referrer-Policy","pass",""],["Permissions-Policy","warning","Limiter les API navigateur avec Permissions-Policy."]];
+ var p=f.filter(function(x){return x[1]=="pass"}).length;
+ var s='<b class="h">HTTP 200 · '+p+'/'+f.length+' contrôles présents</b>';
+ f.forEach(function(x){var g=x[1]=="pass";s+='<div class="row"><span class="'+(g?'ok':'wn')+'">'+(g?'✔':'⚠')+'</span><div class="t">'+x[0]+'<small>'+(g?'pass':x[2])+'</small></div></div>'});
+ s+='<div class="note">Contrôle de configuration non intrusif ; ce résultat n’est pas un audit OWASP exhaustif.</div>';
+ $("rw").innerHTML=s;done.w=1;cnt()};
+$("bp").onclick=function(){
+ var h=$("host").value;if(!scope(h))return;
+ var ports=[[22,0],[80,1],[443,1],[8080,0],[8443,0]];
+ var s='<b class="h">Cible : '+h.trim().toLowerCase()+' · IP : 127.0.0.1</b>';
+ ports.forEach(function(x){var o=x[1];s+='<div class="row"><span class="'+(o?'wn':'ok')+'">'+(o?'🔓':'🔒')+'</span><div class="t">Port '+x[0]+'</div><small style="color:'+(o?'#ffa726':'#8a97ab')+'">'+(o?'OUVERT':'FERMÉ / FILTRÉ')+'</small></div>'});
+ s+='<div class="note">Connexion TCP simple sur une liste fixe de ports ; aucun exploit ni authentification.</div>';
+ $("rp").innerHTML=s;done.p=1;cnt()};
+var H=[];
+function hist(k,t){H.push({k:k,t:t,d:new Date().toLocaleString('fr-FR')});var s='';H.forEach(function(x){s+='<div class="row"><span class="ok">●</span><div class="t">'+x.k+' · '+x.t+'<small>'+x.d+'</small></div></div>'});$("hl").innerHTML=s}
+function wrap(id,k,f){var o=$(id).onclick;$(id).onclick=function(){o();if(!$("err").innerHTML)hist(k,f())}}
+wrap("bw","Audit Web",function(){return $("url").value.trim().replace(/[<>&]/g,'')});
+wrap("bp","Ports",function(){return $("host").value.trim().replace(/[<>&]/g,'')});
+$("rc").onclick=function(){H=[];$("hl").textContent="Aucun audit pour l’instant."};
+$("rb").onclick=function(){var t="RAPPORT CYBERFORGE PRO\n"+H.map(function(x){return x.d+" - "+x.k+" - "+x.t}).join("\n");try{navigator.clipboard.writeText(t);$("rb").textContent="✔ Copié"}catch(e){$("rb").textContent="Copie impossible"}};
+$("len").oninput=function(){$("lv").textContent=this.value};
+$("bg").onclick=function(){var c="abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%&*?-_",n=+$("len").value,a=new Uint32Array(n),s="";crypto.getRandomValues(a);for(var i=0;i<n;i++)s+=c[a[i]%c.length];$("pw").value=s;$("ps").value=s;$("ps").oninput()};
+$("cp").onclick=function(){try{navigator.clipboard.writeText($("pw").value);$("cp").textContent="✔ Copié"}catch(e){$("cp").textContent="Copie impossible"}};
+$("ps").oninput=function(){var v=this.value,p=0;if(/[a-z]/.test(v))p+=26;if(/[A-Z]/.test(v))p+=26;if(/[0-9]/.test(v))p+=10;if(/[^a-zA-Z0-9]/.test(v))p+=32;var bits=v.length?Math.round(v.length*Math.log2(p||1)):0,l=bits<40?["Très faible","#e53935"]:bits<60?["Faible","#ffa726"]:bits<80?["Correct","#fdd835"]:["Fort","#36d6c4"];$("pr").textContent=v.length?l[0]+" · ~"+bits+" bits d’entropie":"Rien n’est envoyé nulle part.";$("pb").style.width=Math.min(100,bits)+"%";$("pb").style.background=l[1]};
+$("hb").onclick=async function(){var d=new TextEncoder().encode($("hi").value),o="";for(var a of ["SHA-256","SHA-1"]){var h=await crypto.subtle.digest(a,d);o+=a+" : "+Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,"0")}).join("")+"<br><br>"}$("ho").innerHTML=o};
+$("hx").onclick=function(){var t=$("ht").value.toLowerCase(),k=[["strict-transport-security","HSTS"],["content-security-policy","CSP"],["x-content-type-options","X-Content-Type-Options"],["x-frame-options","Anti-framing"],["referrer-policy","Referrer-Policy"],["permissions-policy","Permissions-Policy"]],s="";k.forEach(function(x){var g=t.indexOf(x[0]+":")>=0;s+='<div class="row"><span class="'+(g?'ok':'wn')+'">'+(g?'✔':'⚠')+'</span><div class="t">'+x[1]+'<small>'+(g?'présent':'manquant')+'</small></div></div>'});$("hr").innerHTML=s;hist("En-têtes collés","manuel")};
+function sim(i,b,r,rows){$(b).onclick=function(){var h=$(i).value;if(!scope(h))return;var s="";rows.forEach(function(x){s+='<div class="row"><span class="'+(x[0]?'ok':'wn')+'">'+(x[0]?'✔':'⚠')+'</span><div class="t">'+x[1]+'<small>'+x[2]+'</small></div></div>'});$(r).innerHTML=s;hist(b=="cb"?"Certificat":"SPF/DMARC",h.trim().replace(/[<>&]/g,''))}}
+sim("cu","cb","cr",[[1,"Certificat valide","Émis par : Démo CA"],[1,"Expiration","Dans 73 jours"],[1,"Protocole","TLS 1.3"],[0,"Renouvellement","Prévoir avant 30 jours"]]);
+sim("eu","eb","er",[[1,"SPF","Enregistrement présent"],[0,"DMARC","Politique p=none : à durcir"],[1,"DKIM","Sélecteur détecté"]]);
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function rw(ok,t,s){return '<div class="row"><span class="'+(ok?'ok':'wn')+'">'+(ok?'✔':'⚠')+'</span><div class="t">'+t+'<small>'+s+'</small></div></div>'}
+$("nb").onclick=function(){var risk={21:"FTP",23:"Telnet",135:"RPC",139:"NetBIOS",445:"SMB",3389:"Bureau à distance",5900:"VNC",3306:"MySQL",5432:"PostgreSQL"},L=0,E=0,rows="",n=0;$("nt").value.split(/\n/).forEach(function(line){var p=line.trim().split(/\s+/);if(!/^(tcp|udp)/i.test(p[0]||""))return;var loc,fo,st;if(/^\d+$/.test(p[1]||"")&&/^\d+$/.test(p[2]||"")&&p.length>=5){loc=p[3];fo=p[4];st=p[5]||""}else{loc=p[1];fo=p[2];st=/^udp/i.test(p[0])?"":(p[3]||"")}if(!loc)return;var port=+loc.substring(loc.lastIndexOf(":")+1),pub=/^(0\.0\.0\.0|\[::\]|::|\*)/.test(loc),isL=/LISTEN/i.test(st)||(/^udp/i.test(p[0])&&pub);if(/LISTEN/i.test(st))L++;if(/ESTAB/i.test(st))E++;n++;if(n<=30&&(isL||/ESTAB/i.test(st))){var bad=isL&&pub&&risk[port];rows+=rw(!bad,esc(p[0])+" "+esc(loc)+" → "+esc(fo),esc(st||"UDP")+(bad?" · port sensible ("+risk[port]+") ouvert sur toutes les interfaces":""))}});$("nr").innerHTML=n?'<b class="h">'+n+' lignes · '+L+' en écoute · '+E+' établies</b>'+rows:"Aucune ligne reconnue.";if(n)hist("netstat",n+" lignes")};
+function ip2n(s){var a=s.split(".").map(Number);if(a.length!=4||a.some(function(x){return !(x>=0&&x<=255)}))return null;return((a[0]<<24)>>>0)+(a[1]<<16)+(a[2]<<8)+a[3]}
+function n2ip(n){return[n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join(".")}
+$("cib").onclick=function(){var v=$("ci").value.trim().split("/"),n=ip2n(v[0]),c=v.length>1?+v[1]:32;if(n===null||!(c>=0&&c<=32)){$("cir").textContent="IP ou masque invalide.";return}var m=c==0?0:(0xFFFFFFFF<<(32-c))>>>0,net=(n&m)>>>0,bc=(net|(~m>>>0))>>>0,a=n2ip(n).split(".").map(Number),t=a[0]==10||(a[0]==172&&a[1]>=16&&a[1]<=31)||(a[0]==192&&a[1]==168)?"Privée":a[0]==127?"Boucle locale":a[0]==169&&a[1]==254?"Link-local":"Publique";$("cir").innerHTML="Type : "+t+"<br>Réseau : "+n2ip(net)+"<br>Masque : "+n2ip(m)+"<br>Broadcast : "+n2ip(bc)+"<br>Hôtes : "+(c>=31?(c==32?1:2):Math.pow(2,32-c)-2)+(c<31?" ("+n2ip(net+1)+" à "+n2ip(bc-1)+")":"")+"<br>Décimal : "+n+"<br>Binaire : "+a.map(function(x){return x.toString(2).padStart(8,"0")}).join(".")};
+$("sb").onclick=function(){var d=new DOMParser().parseFromString($("src").value,"text/html"),dom={},ext=function(u){try{var h=new URL(u,"https://page.local").hostname;if(h!="page.local")dom[h]=1}catch(e){}},s="";d.querySelectorAll("a[href],script[src],link[href],img[src],iframe[src]").forEach(function(e){ext(e.getAttribute("href")||e.getAttribute("src"))});var com=[],w=document.createTreeWalker(d,128),x;while(x=w.nextNode())com.push(x.nodeValue.trim().slice(0,80));var fm=Array.from(d.forms).map(function(f){return esc((f.method||"get").toUpperCase()+" "+(f.getAttribute("action")||"(même page)"))});var gen=d.querySelector('meta[name=generator]');s+=rw(1,"Titre",esc(d.title||"(aucun)"));s+=rw(1,"Liens / scripts / images",d.querySelectorAll("a").length+" / "+d.querySelectorAll("script").length+" / "+d.querySelectorAll("img").length);s+=rw(!gen,"Générateur (techno)",gen?esc(gen.content):"non indiqué");s+=rw(Object.keys(dom).length<6,"Domaines externes ("+Object.keys(dom).length+")",esc(Object.keys(dom).slice(0,10).join(", ")||"aucun"));s+=rw(!fm.length,"Formulaires ("+fm.length+")",fm.join(" · ")||"aucun")+rw(!d.querySelector("input[type=password]"),"Champ mot de passe",d.querySelector("input[type=password]")?"présent":"aucun")+rw(!d.querySelector("iframe"),"Iframes",d.querySelectorAll("iframe").length+"");s+=rw(!com.length,"Commentaires HTML ("+com.length+")",esc(com.slice(0,3).join(" | ")||"aucun"));$("sr").innerHTML=s;hist("Code source","collé")};
+$("fb").onclick=function(){var h=$("fu").value;if(!scope(h))return;$("fr").innerHTML=rw(1,"Adresse IP","127.0.0.1 (IPv4)")+rw(1,"DNS inverse","localhost")+rw(0,"Serveur","uvicorn · version visible dans les en-têtes")+rw(1,"Technologie","FastAPI (Python)")+rw(1,"Redirection","aucune");hist("Fiche site",esc(h.trim()))};
+function b64d(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder().decode(u)}
+$('jwb').onclick=function(){var p=$('jw')
